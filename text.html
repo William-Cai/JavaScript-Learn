@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .demo1 {
+            position: relative;
+            text-decoration: none;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .demo1:before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background: #4285f4;
+            transition: all .3s;
+        }
+
+        .demo1:hover:before {
+            width: 100%;
+            left: 0;
+            right: 0;
+        }
+    </style>
+    <style>
+        .demo2 {
+            position: relative;
+            text-decoration: none;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .demo2:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            height: 2px;
+            width: 100%;
+            background: #4285f4;
+            transform: scale(0);
+            transition: all 0.3s;
+        }
+
+        .demo2:hover:after {
+            transform: scale(1);
+        }
+    </style>
+    <style>
+        .demo3 {
+            text-decoration: none;
+            position: relative;
+        }
+
+        .demo3:before {
+            width: 0;
+            transition: all 0.5s;
+            position: absolute;
+            left:50%;
+            background: #4285f4;
+            height:1px;
+            bottom:-4px;
+            content: '';
+        }
+
+        .demo3:hover:before {
+            width: 100%;
+            left:0;
+            right:0;
+        }
+
+    </style>
+    <script src="t1.js"></script>
+<body>
+<div>
+    <a href="javascript:void(0);" class="demo1">自己实现的hover效果</a>
+</div>
+<div>
+    <a href="javascript:void(0);" class="demo2">Hexo next主题的实现</a>
+</div>
+<div>
+    <a href="javascript:void(0);" class="demo3">自测-自己实现的hover效果</a>
+</div>
+</body>
+</html>

@@ -177,4 +177,103 @@ console.log(object.getNameFunc()()); //my object
 
 //TODO 内存泄漏
 
+//匿名还输保存了一个对assignHandler()的活动对象的引用，因此就会导致无法减少element的引用数。
+//只要匿名函数存在，element的引用数至少是1，因此它所占用的内存就永远不会被回收。
+/*function assignHandler(){
+    var element = document.getElementById('someElement');
+    element.onclick = function () {
+        console.log(element.id);
+    }
+}*/
+
+
+//改进
+/*function assignHandler() {
+    var element = document.getElementById('someElement');
+    var id = element.id;
+    element.onclick = function () {
+        console.log(id);
+    }
+    element = null;
+}*/
+
+
+//TODO 模仿块级作用域
+/*
+function output(count) {
+    for(var i=0;i<count;i++){
+        console.log(i);
+    }
+    console.log(i); //10
+}
+
+output(10);
+*/
+
+/*(function () {
+    //这里是块级作用域
+})();
+
+var someFunction = function () {
+  //这里是块级作用域
+};*/
+
+/*
+function () {
+
+}()  //出错*/
+
+
+/*
+function output(count) {
+    (function () {
+        for (var i = 0; i < count; i++) {
+            console.log(i);
+        }
+    })();
+
+    console.log(i); //出错 i is not defined
+}
+
+output(10)*/
+
+//TODO 私有变量
+//任何在函数中定义的变量，都可以认为是私有变量，因为不能在函数的外部访问这些变量
+/*function MyObject() {
+
+    //私有变量和函数
+    var pv = 10;
+
+    function pFunction() {
+        return false;
+    }
+
+    //特权方法
+    this.publicMethod = function () {
+        pv++;
+        return pFunction();
+    }
+}*/
+
+//TODO  静态私有变量
+(function () {
+
+    //私有变量和私有函数
+    var privateVariable = 10;
+
+    function privateFunction() {
+        return false;
+    }
+
+    //构造函数
+    MyObject = function () {
+
+    }
+
+    // 公有/特权方法
+    MyObject.prototype.publicMethod = function () {
+        privateVariable ++;
+         return privateFunction();
+    }
+})();
 

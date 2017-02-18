@@ -295,4 +295,66 @@ my1.add();
 console.log(my.getVar());
 console.log(my1.getVar());
 //这个例子说明了，privateVariable属于所有实例的共享属性。
-//也就是说
+//也就是说，在一个实例上调用了add()方法会影响所有实例的 privateVariable 值
+
+//TODO 模块模式
+/*var singleton = function () {
+    var privateVariable = 10;
+
+    function privateFunction() {
+        return false;
+    }
+
+    return {
+        publicProperty: true,
+        publicMethod: function () {
+            privateVariable ++;
+            return privateFunction();
+        }
+    };
+}();*/
+
+//适用在需要对单例进行某些初始化，同时有需要维护其私有变量时非常有用的
+/*
+var application = function () {
+
+    //私有变量和函数
+    var components = new Array();
+
+    //初始化
+    components.push(new BaseComponent());
+
+    //公共
+    return {
+        getComponentCount : function () {
+            return components.length;
+        },
+        registerComponent: function (component) {
+            components.push(component);
+        }
+    }
+
+}();*/
+
+//TODO 增强的模块模式
+var application = function () {
+
+    //私有变量和函数
+    var components = new Array();
+
+    //初始化
+    components.push(new BaseComponent());
+
+    var app = new BaseComponent();
+
+    //公共接口
+    app.getComponentCount = function () {
+        return components.length;
+    };
+    app.registerComponent = function (component) {
+        components.push(component);
+    };
+
+    //返回这个对象
+    return app;
+}();

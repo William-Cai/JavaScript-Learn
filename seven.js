@@ -268,12 +268,31 @@ output(10)*/
     //构造函数
     MyObject = function () {
 
-    }
+    };
 
     // 公有/特权方法
     MyObject.prototype.publicMethod = function () {
-        privateVariable ++;
-         return privateFunction();
+        privateVariable++;
+        return privateFunction();
+    }
+
+    MyObject.prototype.add = function () {
+        privateVariable++;
+    }
+    MyObject.prototype.getVar = function () {
+        return privateVariable;
     }
 })();
 
+var my = new MyObject();
+var my1 = new MyObject();
+
+my.add();
+console.log(my.getVar());
+console.log(my1.getVar());
+
+my1.add();
+console.log(my.getVar());
+console.log(my1.getVar());
+//这个例子说明了，privateVariable属于所有实例的共享属性。
+//也就是说

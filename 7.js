@@ -1,7 +1,10 @@
 /**
- * 第七章 函数表达式
- * Created by FFCS-CAIWL on 2016/12/18.
+ * @Title 第七章 函数表达式
+ * @Description
+ * @Author Winnie.Cai
+ * @CreteData 2017/3/22.
  */
+
 
 //函数声明的语法
 /*function functionName() {

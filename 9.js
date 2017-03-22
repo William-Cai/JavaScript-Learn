@@ -1,9 +1,10 @@
 /**
- * @Title: 客户端检测
- * @Description:
- * @Author:Weili.Cai
- * @Created Date:2017/2/20
+ * @Title 第九章 客户端检测
+ * @Description
+ * @Author Winnie.Cai
+ * @CreteData 2017/3/22.
  */
+
 //TODO 能力检测
 /*if(object.propertyInQuestions){
     //使用object.propertyInQuestions

@@ -1,9 +1,10 @@
 /**
- * @Title: 事件对象
- * @Description:
- * @Author:Weili.Cai
- * @Created Date:2017/2/20
+ * @Title 第十三章 事件对象
+ * @Description
+ * @Author Winnie.Cai
+ * @CreteData 2017/3/22.
  */
+
 /**
  * 兼容 添加事件好移除事件
  * 注意对事件绑定的type值有区分

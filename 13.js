@@ -99,6 +99,46 @@ var EventUtil = {
         } else {
             return null;
         }
+    },
+    /**
+     * DOM的button属性：0表示主鼠标按钮，1表示中间的数遍按钮（鼠标滚轮按钮），2表示次鼠标按钮。
+     * IE8及更早版本的button属性：0：表示没有按下按钮。1表示主鼠标按钮。2表示次鼠标按钮。3表示同时按下了主、次鼠标按钮。
+     *      4表示按下了中间的鼠标按钮。5表示同时按下了主，中间的鼠标按钮。6表示按下了次、中间的鼠标按钮。7表示同时按下了三个鼠标按钮。
+     * @param event
+     * @returns {*}
+     */
+    getButton: function (event) {
+        if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+            return event.button;
+        } else {
+            switch (event.button) {
+                case 0:
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                    return 0;
+                case 2:
+                case 6:
+                    return 2;
+                case 4:
+                    return 1;
+            }
+        }
+    },
+    /**
+     * 向上：120，向下：-120。
+     * 备注：FF添加滚动事件为EventUtil.addHandler(document, "DOMMouseScroll", fn);
+     *      Opera浏览器中的wheelDelta的正负号是相反的。
+     * @param event
+     * @returns {*}
+     */
+    getWheelDelta: function (event) {
+        if (event.wheelDelta) {
+            return (client.engine.opera && client.engine.opera < 9.5 ? -event.wheelDelta : event.wheelDelta); //配合第九章的client
+        } else { //FF中有个名为DOMMouseScroll的事件，属性的值是-3的倍数，所以让所有浏览器兼容的，就乘于40。
+            return -event.detail * 40;
+        }
     }
 };
 
@@ -264,3 +304,39 @@ EventUtil.addHandler(div, 'mouseout', function (event) {
 });
 
 //鼠标按钮
+//DOM模型中下的button属性比IE模型下的button属性更为简单也更为实用
+//参考EventUtil.getButton()
+EventUtil.addHandler(btn, 'mousedown', function (event) {
+    event = EventUtil.getEvent(event);
+    alert(EventUtil.getButton(event));
+});
+
+//更多的事件信息
+//event对象中还提供了detail
+//IE有其他的altLeft,ctrlLeft,shiftLeft,offsetX,offsetY
+EventUtil.addHandler(btn, 'mousedown', function (event) {
+    event = EventUtil.getEvent(event);
+    window.console.log(event.detail);//累加从1开始，每次点击加一次，每次点击的间隔要小
+});
+
+//鼠标滚轮事件
+EventUtil.addHandler(document, 'mousewheel', function (event) {
+    event = EventUtil.getEvent(event);
+    var delta = EventUtil.getWheelDelta(event);
+    window.console.log(delta);
+});
+
+//添加滚动事件
+(function () {
+    function handleMouseWheel(event) {
+        event = EventUtil.getEvent(event);
+        var delta = EventUtil.getWheelDelta(event);
+        window.console.log(delta);
+    }
+    
+    EventUtil.addHandler(document, 'mousewheel', handleMouseWheel);
+    EventUtil.addHandler(document, 'DOMMouseScroll', handleMouseWheel); //FF才适用的
+})();
+
+//触摸设备
+

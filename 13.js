@@ -139,6 +139,19 @@ var EventUtil = {
         } else { //FF中有个名为DOMMouseScroll的事件，属性的值是-3的倍数，所以让所有浏览器兼容的，就乘于40。
             return -event.detail * 40;
         }
+    },
+    /**
+     * 只有在keypress中才会获取到
+     * @param event
+     * @returns {*}
+     */
+    getCharCode: function (event) {
+        //按下keypress才包含值
+        if (typeof event.charCode == "number") {
+            return event.charCode; //IE9,Firefox,Chrome和Safari
+        } else {
+            return event.keyCode; //IE8及之前版本和Opera
+        }
     }
 };
 
@@ -333,10 +346,88 @@ EventUtil.addHandler(document, 'mousewheel', function (event) {
         var delta = EventUtil.getWheelDelta(event);
         window.console.log(delta);
     }
-    
+
     EventUtil.addHandler(document, 'mousewheel', handleMouseWheel);
     EventUtil.addHandler(document, 'DOMMouseScroll', handleMouseWheel); //FF才适用的
 })();
 
 //触摸设备
+//没有鼠标
+// 1.不支持dbclick（双击浏览器会放大，不可改变）
+// 2.轻击可单击元素会触发mousemove事件，如果此操作会导致内容变化，将不再有其他事件发生。
+//   如果屏幕没有发生变化，会依次发生mousedown，mouseup和click事件。
+// 3.mousemove事件也会触发mouseover和mouseout事件
+// 4.两个手指放在屏幕上且页面随手指移动而滚动时会触发mousewheel和scroll事件
 
+//无障碍性问题
+
+
+//TODO 13.4.4 键盘与文本事件
+//3个键盘事件,keydown，keypress，keyup
+//键码
+//Firefox和Opera中，分号键（;）返回59，但是在IE和Safari返回的是186.
+//
+EventUtil.addHandler(textbox, 'keypress', function (event) {
+    event = EventUtil.getEvent(event);
+    textbox.value = EventUtil.getCharCode(event);
+    window.console.log(String.fromCharCode(textbox.value));// 取得字符编码可以用该方法转换成实际的字符，输出大写
+});
+
+//只支持IE9+,Safari,Chrome
+EventUtil.addHandler(textbox, 'textInput', function (event) {
+    event = EventUtil.getEvent(event);
+    alert(event.data);//按下的就是实际字符，也能区分有没有shift的，会区分大小写
+});
+
+//IE 支持inputMethod，表示该文本是通过什么方式输入到控件中的。
+
+//设备中的键盘事件
+
+//TODO 13.4.5 复合事件
+//IE9+支持
+var isSupported = document.implementation.hasFeature('CompositionEvent', '3.0');
+
+//TODO 13.4.6 变动事件
+//IE8及更早版本不支持，Opera 9+不支持DOMSubtereModified
+
+//TODO 13.4.7
+//contextmenu事件
+//beforeunload事件
+//DOMContentLoaded事件
+//readystatechange事件
+//pageShow和pageHide事件
+//hashchange事件
+var isSupported = ("onhashchange" in window) &&
+    (document.documentMode === undefined || document.documentMode > 7);
+
+//TODO 13.4.8 设备事件
+//orientationchange事件
+//MozOrientation
+//deviceorientation
+//devicemotion
+
+//TODO 13.4.9 触摸与手势事件
+//触摸事件
+//
+
+//TODO 13.6 模拟事件
+//TODO 13.6.1 DOM中的事件模拟
+var btn = document.querySelector("#myBtn");
+//创建事件对象
+var _ev = document.createEvent("MouseEvents");
+//初始化事件对象
+_ev.initMouseEvent('click', true, true, document.defaultView, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+//触发事件
+btn.dispatchEvent(_ev);
+
+//TODO 13.6.2 IE中的事件模拟
+var event = document.createEventObject();
+event.screenX = 100;
+event.screenY = 0;
+event.clientX = 0;
+event.clientY = 0;
+event.ctrlKey = false;
+event.altKey = false;
+event.shiftKey = false;
+event.button = 0;
+btn.fireEvent("onclick", event);

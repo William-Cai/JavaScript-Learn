@@ -185,3 +185,98 @@ SubCookieUtil.usnet("data", "name");
 SubCookieUtil.unsetAll("data");
 
 //IE用户数据
+//<div style="behavior:url(#default#userData)" id="dataStore"></div>
+var dataStore = document.getElementById("dataStore");
+dataStore.setAttribute("name", "winnie");
+dataStore.save("Info");
+
+//加载
+var info = dataStore.load("Info");
+var name = info.getAttribute("name");
+
+//移除
+dataStore.removeAttribute("name");
+dataStore.save("Info");
+
+//Web存储机制
+//Storage，sessionStorage,globalStorage(FF中才有),localStorage
+//设值，两种方式
+sessionStorage.setItem("name", "winnie");
+sessionStorage.name = "winnie";
+
+//获取
+var name = sessionStorage.getItem("name");
+name = sessionStorage.name;
+
+//迭代
+for (var i = 0, len = sessionStorage.length; i < len; i++) {
+    var key = sessionStorage.key(i); //获取指定位置上的名字
+    var value = sessionStorage.getItem(key);
+    console.log(key + "=" + value);
+}
+for (var key in sessionStorage) {
+    var value = sessionStorage.getItem(key);
+    console.log(key + "=" + value);
+}
+
+//删除
+delete sessionStorage.name;
+sessionStorage.removeItem("name");
+
+//Firefox2 globalStorage
+
+//localStorage，方法与sessionStorage一样
+
+//兼容形式
+function getLocalStorage() {
+    if (typeof localStorage == "object") {
+        return localStorage;
+    } else if (typeof globalStorage == "object") {
+        return globalStorage[location.host];
+    } else {
+        throw new Error("Local storage not available.");
+    }
+}
+
+//事件
+EventUtil.addHandler(document, "storage", function (event) {
+    console.log("Storage changed for" + event.detail);
+});
+
+
+
+//IndexedDB
+var request, database, transaction, store;
+var indexedDB = window.indexedDB ||
+    window.msIndexedDB ||
+    window.mozIndexedDB ||
+    window.webkitIndexedDB;
+request = indexedDB.open("admin");
+
+request.onerror = function (event) {
+    console.log("打开数据库失败\n" + event.target.errorCode);
+};
+request.onsuccess = function (event) {
+    database = event.target.result;
+    console.log("success, version:" + database.version);
+};
+
+request.onupgradeneeded = function (event) {
+    database = request.result;
+    console.log("new version:" + database.version);
+    store = database.createObjectStore("users", {keyPath: "username"});
+};
+
+var user = {
+    username: "winnie",
+    firstName: "cai",
+    lastName: "weili",
+    password: "test"
+};
+
+transaction = database.transaction("users", "readwrite");
+
+var store = database.createObjectStore("users", {keyPath: "username"});
+
+var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
+

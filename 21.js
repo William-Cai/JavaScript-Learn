@@ -56,6 +56,21 @@ xhr.open("get", "url", false); //同步
 xhr.setRequestHeader("key", "value"); //设置请求头部的信息， 可以自定义，也可以是内置的
 xhr.send(null); //传递的数据data
 
+//进度事件
+xhr.onload = function () {
+    if( (xhr.status >= 200 && xhr.status<300) || xhr.statue== 304){
+        alert(xhr.responseText);
+    } else{
+        alert("Request was unsuccessful: " + xhr.status);
+    }
+};
+
+//process事件
+xhr.onprogress = function (event) {
+    if(event.lengthComputable){ //进度信息是否可用
+        alert("接收:" + event.position) +" 总共: "+event.totalSize+"bytes";
+    }
+};
 
 //=================以下要保持写在open()方法调用之前============================
 //状态变化事件
